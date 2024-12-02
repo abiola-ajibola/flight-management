@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navigationMenuTriggerStyle } from "./navigationMenuTriggerStyle";
 import { Link, LinkProps, useLocation } from "react-router-dom";
+import { Route } from "@/lib/router";
 
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
@@ -124,16 +125,17 @@ function NavLink({
   );
 }
 
-export function Nav() {
+export function Nav({ routes }: { routes: Route[] }) {
   return (
     <NavigationMenu className="w-full p-2 mb-8 mt-4 !max-w-full">
       <NavigationMenuList className="w-full flex justify-center">
-        <NavigationMenuItem>
-          <NavLink className="px-4 mx-4" to="/">Home</NavLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavLink className="px-4 mx-4" to="/signup">Signup</NavLink>
-        </NavigationMenuItem>
+        {routes.map(({ name, route }) => (
+          <NavigationMenuItem key={name}>
+            <NavLink className="px-4 mx-4" to={route}>
+              {name}
+            </NavLink>
+          </NavigationMenuItem>
+        ))}
       </NavigationMenuList>
     </NavigationMenu>
   );

@@ -1,46 +1,112 @@
+import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
-import { Input } from "@/components/Input";
-import { Label } from "@/components/Label";
+import { Form, InputGroup } from "@/components/Form";
+import { register } from "@/lib/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { BaseSyntheticEvent } from "react";
+import { Control, FieldErrors, FieldValues, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { object, string } from "zod";
+
+type SignupFormValues = {
+  name: string;
+  email: string;
+  password: string;
+  "confirm-password": string;
+};
+
+const formSchema = object({
+  name: string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+  email: string().email({
+    message: "Please enter a valid email address.",
+  }),
+  password: string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
+  "confirm-password": string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
+}).refine((data) => data.password === data["confirm-password"], {
+  message: "Passwords don't match",
+  path: ["confirm-password"],
+});
 
 export function Signup() {
+  const form = useForm<SignupFormValues>({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      "confirm-password": "",
+    },
+    resolver: zodResolver(formSchema),
+  });
+  async function onSubmit(data: FieldValues) {
+    console.log("submitting form");
+    console.log({ data });
+    const { status, data: responseData } = await register({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
+    console.log({ status, responseData });
+  }
+
+  function onErrors(
+    errors: FieldErrors<SignupFormValues>,
+    e?: BaseSyntheticEvent
+  ) {
+    console.log("errors in form");
+    console.log({ errors, e });
+  }
+
   return (
     <div className="w-[350px] justify-self-center">
-      <Card title="Signup"  >
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Name of your project" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="email">Email</Label>
-              <Input
+      <Card title="Signup">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit, onErrors)}>
+            <div className="grid w-full items-center gap-4">
+              <InputGroup
+                id="name"
+                name="name"
+                label="Name"
+                placeholder="Your name"
+                control={form.control as unknown as Control<FieldValues>}
+              />
+              <InputGroup
                 id="email"
                 name="email"
-                type="email"
+                label="Email"
                 placeholder="Your email address"
+                control={form.control as unknown as Control<FieldValues>}
               />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="password">Password</Label>
-              <Input
+              <InputGroup
                 id="password"
                 name="password"
+                label="Password"
                 type="password"
                 placeholder="A secure password"
+                control={form.control as unknown as Control<FieldValues>}
               />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
-              <Input
+              <InputGroup
                 id="confirm-password"
                 name="confirm-password"
+                label="Confirm Password"
                 type="password"
                 placeholder="Confirm your password"
+                control={form.control as unknown as Control<FieldValues>}
               />
             </div>
-          </div>
-        </form>
+            <div className="flex justify-center mt-4">
+              <Button type="submit">Signup</Button>
+            </div>
+          </form>
+        </Form>
+        <h4 className="text-center mt-4">
+          Already registered? <Link to="auth/signin">Sign in</Link>
+        </h4>
       </Card>
     </div>
   );
