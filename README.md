@@ -1,5 +1,10 @@
 # Flight Management App
 
+## Requirements
+
+- Package manager yarn@1.22.22
+- Node.js v22.11.0
+
 ## Installation
 
 - Clone the repository and 
@@ -15,6 +20,12 @@
 - start the project by running the following command
 
       yarn dev
+
+## Tests
+
+- Run
+
+      yarn test
 
 
 ## Assumptions
