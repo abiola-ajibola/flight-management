@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { flights, IFlightData, IFlightResponse } from "@/lib/api";
 import { FlightCard } from "@/components/Card/FlightCard";
 import { Pagination } from "@/components/Pagination";
@@ -5,76 +6,13 @@ import { useEffect, useState } from "react";
 import { TFlightQuery } from "@/lib/api";
 import { Input } from "@/components/Input";
 import { Skeleton } from "@/components/Skeleton";
-import { Link } from "react-router-dom";
+// import { sampleFLightsResponse } from "./sampleData";
 
 const defaultQuery: TFlightQuery = {
   page: 1,
   size: 10,
   code: "",
 };
-
-// const sampleFLightsResponse: IFlightResponse = {
-//   total: 3,
-//   count: 1,
-//   resources: [
-//     {
-//       id: "e9890ca4-2bac-4e5b-b614-732176270bad",
-//       img: "https://robohash.org/e9890ca4-2bac-4e5b-b614-732176270bad/?size=200x200",
-//       status: "none",
-//       code: "AbcDef",
-//       capacity: 50,
-//       departureDate: "2020-10-23",
-//     },
-//     {
-//       id: "e9890ca4-2bac-4e5b-b614-732176270bef",
-//       img: "https://robohash.org/e9890ca4-2bac-4e5b-b614-732176270bef/?size=200x200",
-//       status: "none",
-//       code: "AbcDef",
-//       capacity: 50,
-//       departureDate: "2020-10-23",
-//     },
-//     {
-//       id: "e9890ca4-2bac-4e5b-b614-732176270bed",
-//       img: "https://robohash.org/e9890ca4-2bac-4e5b-b614-732176270bed/?size=200x200",
-//       status: "none",
-//       code: "AbcDef",
-//       capacity: 50,
-//       departureDate: "2020-10-23",
-//     },
-//     {
-//       id: "e9890ca4-2bac-4e5b-b614-732176270bac",
-//       img: "https://robohash.org/e9890ca4-2bac-4e5b-b614-732176270bac/?size=200x200",
-//       status: "none",
-//       code: "AbcDef",
-//       capacity: 50,
-//       departureDate: "2020-10-23",
-//     },
-//     {
-//       id: "e9890ca4-2bac-4e5b-b614-732176270bee",
-//       img: "https://robohash.org/e9890ca4-2bac-4e5b-b614-732176270bee/?size=200x200",
-//       status: "none",
-//       code: "AbcDef",
-//       capacity: 50,
-//       departureDate: "2020-10-23",
-//     },
-//     {
-//       id: "e9890ca4-2bac-4e5b-b614-732176270bfcaa",
-//       img: "https://robohash.org/e9890ca4-2bac-4e5b-b614-732176270bfcaa/?size=200x200",
-//       status: "none",
-//       code: "AbcDef",
-//       capacity: 50,
-//       departureDate: "2020-10-23",
-//     },
-//     {
-//       id: "e9890ca4-2bac-4e5b-b614-732176270badf",
-//       img: "https://robohash.org/e9890ca4-2bac-4e5b-b614-732176270badf/?size=200x200",
-//       status: "none",
-//       code: "AbcDef",
-//       capacity: 50,
-//       departureDate: "2020-10-23",
-//     },
-//   ],
-// };
 
 export function Flights() {
   // const [flightsData, setFlightsData] = useState<IFlightData[]>(
