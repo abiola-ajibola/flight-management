@@ -173,7 +173,7 @@ export function InputGroup({
   id,
   name,
   type = "text",
-  control,
+  control, ...props
 }: {
   placeholder?: string;
   label: string;
@@ -182,7 +182,7 @@ export function InputGroup({
   type?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<FieldValues, any>;
-}) {
+} & React.ComponentProps<typeof Input>) {
   return (
     <FormField
       control={control}
@@ -191,7 +191,7 @@ export function InputGroup({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input type={type} id={id} placeholder={placeholder} {...field} />
+            <Input type={type} id={id} placeholder={placeholder} {...props} {...field} />
           </FormControl>
           {/* <FormDescription>This is your public display name.</FormDescription> */}
           <FormMessage />

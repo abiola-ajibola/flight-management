@@ -1,11 +1,18 @@
 import { RouterProvider } from "react-router-dom";
-import "./App.css";
+import { ToastContainer } from "react-toastify";
 import { router } from "./lib/router";
+
+import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
+import { UserProfileProvider } from "./contexts/auth";
 
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <UserProfileProvider>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </UserProfileProvider>
     </>
   );
 }
