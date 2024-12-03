@@ -3,7 +3,7 @@ import { Card } from "@/components/Card";
 import { Form, InputGroup } from "@/components/Form";
 import { auth } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BaseSyntheticEvent } from "react";
+import { BaseSyntheticEvent, useState } from "react";
 import { Control, FieldErrors, FieldValues, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { object, string } from "zod";
@@ -34,6 +34,7 @@ const formSchema = object({
 });
 
 export function Signup() {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<SignupFormValues>({
     defaultValues: {
       name: "",
@@ -44,7 +45,7 @@ export function Signup() {
     resolver: zodResolver(formSchema),
   });
   async function onSubmit(data: FieldValues) {
-    console.log("submitting form");
+    setIsLoading(true);
     console.log({ data });
     const { status, data: responseData } = await auth.register({
       name: data.name,
@@ -52,6 +53,9 @@ export function Signup() {
       password: data.password,
     });
     console.log({ status, responseData });
+    if (data || data === undefined) {
+      setIsLoading(false);
+    }
   }
 
   function onErrors(
@@ -100,7 +104,9 @@ export function Signup() {
               />
             </div>
             <div className="flex justify-center mt-4">
-              <Button type="submit">Signup</Button>
+              <Button loading={isLoading} type="submit">
+                Signup
+              </Button>
             </div>
           </form>
         </Form>

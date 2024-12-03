@@ -4,7 +4,7 @@ import { Form, InputGroup } from "@/components/Form";
 import { useUserProfileContext } from "@/contexts/auth/authContext";
 import { auth } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BaseSyntheticEvent } from "react";
+import { BaseSyntheticEvent, useState } from "react";
 import { Control, FieldErrors, FieldValues, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { object, string } from "zod";
@@ -25,6 +25,7 @@ const formSchema = object({
 
 export function Signin() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const { isSignedIn } = useUserProfileContext();
   if (isSignedIn) {
     navigate("/home");
@@ -37,13 +38,15 @@ export function Signin() {
     resolver: zodResolver(formSchema),
   });
   async function onSubmit(data: FieldValues) {
-    console.log("submitting form");
-    console.log({ data });
+    setIsLoading(true);
     const { status, data: responseData } = await auth.signin({
       email: data.email,
       password: data.password,
     });
     console.log({ status, responseData });
+    if (data || data === undefined) {
+      setIsLoading(false);
+    }
   }
 
   function onErrors(
@@ -77,7 +80,9 @@ export function Signin() {
               />
             </div>
             <div className="flex justify-center mt-4">
-              <Button type="submit">Signin</Button>
+              <Button loading={isLoading} type="submit">
+                Signin
+              </Button>
             </div>
           </form>
         </Form>
